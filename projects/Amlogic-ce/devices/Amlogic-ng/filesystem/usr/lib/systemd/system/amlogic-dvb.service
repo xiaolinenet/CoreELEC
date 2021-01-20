@@ -5,7 +5,7 @@ After=kodi-autostart.service
 
 [Service]
 Type=simple
-ExecStart=/bin/sh -c '[ `cat /proc/device-tree/dvb/compatible` = "amlogic,dvb" ] && /sbin/modprobe aml_fe'
+ExecStart=/bin/sh -c '[ `cat /proc/device-tree/dvb/status` = "disabled" ] || /sbin/modprobe aml_fe'
 
 [Install]
 WantedBy=basic.target
