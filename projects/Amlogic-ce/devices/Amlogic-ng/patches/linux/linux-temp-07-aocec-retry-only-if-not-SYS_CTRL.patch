@@ -1,0 +1,27 @@
+From 26cfa3a47cc59dd9015452a018af292fe09e9332 Mon Sep 17 00:00:00 2001
+From: Portisch <hugo.portisch@yahoo.de>
+Date: Fri, 5 Feb 2021 20:10:51 +0100
+Subject: [PATCH 3/3] aocec: retry only if not SYS_CTRL
+
+---
+ drivers/amlogic/cec/hdmi_ao_cec.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/amlogic/cec/hdmi_ao_cec.c b/drivers/amlogic/cec/hdmi_ao_cec.c
+index ad57f2f27035..3f14780f1ebe 100644
+--- a/drivers/amlogic/cec/hdmi_ao_cec.c
++++ b/drivers/amlogic/cec/hdmi_ao_cec.c
+@@ -1565,6 +1565,10 @@ int cec_ll_tx(const unsigned char *msg, unsigned char len)
+ 	unsigned int cec_sel;
+ 
+ 	mutex_lock(&cec_dev->cec_tx_mutex);
++
++	if (cec_dev->hal_flag & (1 << HDMI_OPTION_SYSTEM_CEC_CONTROL))
++		retry = 0;
++
+ 	/* only use cec a send msg */
+ 	if (cec_dev->cec_num > ENABLE_ONE_CEC)
+ 		cec_sel = CEC_A;
+-- 
+2.30.0
+

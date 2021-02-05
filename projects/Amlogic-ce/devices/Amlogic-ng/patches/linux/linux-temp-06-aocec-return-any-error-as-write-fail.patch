@@ -1,0 +1,30 @@
+From 61d9e2cb2bad9f95f403cba7a501f8a5cc4d556b Mon Sep 17 00:00:00 2001
+From: Portisch <hugo.portisch@yahoo.de>
+Date: Fri, 5 Feb 2021 20:10:25 +0100
+Subject: [PATCH 2/3] aocec: return any error as write fail
+
+---
+ drivers/amlogic/cec/hdmi_ao_cec.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/amlogic/cec/hdmi_ao_cec.c b/drivers/amlogic/cec/hdmi_ao_cec.c
+index b2b58beeec9a..ad57f2f27035 100644
+--- a/drivers/amlogic/cec/hdmi_ao_cec.c
++++ b/drivers/amlogic/cec/hdmi_ao_cec.c
+@@ -3023,10 +3023,10 @@ static ssize_t hdmitx_cec_write(struct file *f, const char __user *buf,
+ 	if (cec_cfg & CEC_FUNC_CFG_CEC_ON) {
+ 		/*cec module on*/
+ 		ret = cec_ll_tx(tempbuf, size);
+-		if (ret == CEC_FAIL_NACK) {
+-			return -1;
+-		} else {
++		if (ret == CEC_FAIL_NONE) {
+ 			return size;
++		} else {
++			return -1;
+ 		}
+ 	} else {
+ 		CEC_ERR("err:cec module disabled\n");
+-- 
+2.30.0
+
