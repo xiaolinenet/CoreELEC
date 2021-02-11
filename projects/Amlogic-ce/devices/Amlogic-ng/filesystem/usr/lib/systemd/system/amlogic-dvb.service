@@ -4,8 +4,9 @@ ConditionPathExists=/proc/device-tree/dvb/
 After=kodi-autostart.service
 
 [Service]
-Type=simple
-ExecStart=/bin/sh -c '[ `cat /proc/device-tree/dvb/status` = "disabled" ] || /sbin/modprobe aml_fe'
+Type=oneshot
+ExecStart=/bin/sh -c "[ ! -f '/proc/device-tree/dvb/status' -a $(cat /proc/device-tree/dvb/compatible) = "amlogic,dvb" ] && /sbin/modprobe aml_fe"
+ExecStart=/bin/sh -c "[ -f '/proc/device-tree/dvb/status' -a $(cat /proc/device-tree/dvb/status) = "okay" ] && /sbin/modprobe aml_fe"
 
 [Install]
 WantedBy=basic.target
